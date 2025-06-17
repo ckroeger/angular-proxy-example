@@ -1,6 +1,6 @@
 # AngularProxyExample
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.2.
+This is an example angular-app with a backend-call via a proxy. This example demonstrates how to set up an Angular application that communicates with a backend server through a proxy configuration.
 
 ## Development server
 
@@ -57,3 +57,33 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Use jsonserver as backend mock
+
+### install json-server globally
+To use `json-server` as a mock backend, you need to install it globally on your system. You can do this by running the following command:
+```bash
+npm install -g json-server
+```
+
+for this example app start the json-server with the following command:
+```bash
+json-server --watch public/data/posts --port 3000
+```
+This command will start a mock server that serves the JSON data from the `public/data/posts` directory on port 3000. You can then access the mock API at `http://localhost:3000/posts`.
+
+## Proxy Configuration
+The Angular application is configured to use a proxy to redirect API calls to the mock server. The proxy configuration is defined in the ``proxy.conf.json`` file. This file specifies that any requests to `/api` should be forwarded to `http://localhost:3000`. At this moment, the proxy configuration is set to redirect requests to the static JSON files served from the ``public/data`` directory.
+
+```json
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
+```

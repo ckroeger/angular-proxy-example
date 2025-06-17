@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../environments/environment';
+
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,16 @@ export class App {
   constructor(private http: HttpClient) {}
 
   fetchPosts() {
-    this.http.get<any[]>('http://localhost:3000/posts').subscribe((data) => {
-      this.posts = data;
+    const targetUrl = environment.targetUrl;
+    console.log('Fetching posts from:', targetUrl);
+    this.http.get<any>(targetUrl ).subscribe({
+      next: (data) => {
+        console.log('Fetched posts:', data);
+        this.posts = data; // <-- Zugriff auf das Array
+      },
+      error: (err) => {
+        console.error('Error fetching posts:', err);
+      }
     });
   }
 }
